@@ -123,7 +123,7 @@ MixtureRegistry.add(
     "esnli_cos_e_transfer_nli",
     [("esnli_v010", ESNLI_SIZE),
      ("esnli_v010_0_expln", ESNLI_SIZE),
-     ("cos_e_like_esnli", COS_E_SIZE),
+     ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE)],
     default_rate=_rate_num_input_examples,
 )
