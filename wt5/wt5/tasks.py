@@ -69,6 +69,24 @@ TaskRegistry.add(
     output_features=DEFAULT_OUTPUT_FEATURES,
     metric_fns=[metrics.esnli_metric])
 
+# CoS-E with explanations, and modified prefixes like e-SNLI.
+TaskRegistry.add(
+    "cos_e_v001_like_esnli",
+    source=seqio.TfdsDataSource(tfds_name="cos_e:0.0.1"),
+    preprocessors=[
+        functools.partial(
+            preprocessors.cos_e,
+            prefix="nli",
+            question_prefix="premise:"),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    postprocess_fn=postprocessors.abstractive_explanations,
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    metric_fns=[metrics.esnli_metric])
+
+
 n_cos_e_explanations = [5000, 2000, 1000, 500, 200, 100]
 for n in n_cos_e_explanations:
   TaskRegistry.add(
