@@ -117,6 +117,17 @@ for n in tasks.n_movie_explanations:
       "movie_rationales_{}_explanations".format(n),
       movie_rationales_n_explanations_tasks
   )
+
+# --------------------- eSNLI and CoS-E explanation NLI Transfer ---------------
+MixtureRegistry.add(
+    "esnli_cos_e_transfer_nli",
+    [("esnli_v010", ESNLI_SIZE),
+     ("esnli_v010_0_expln", ESNLI_SIZE),
+     ("cos_e_like_esnli", COS_E_SIZE)
+     ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE)],
+    default_rate=_rate_num_input_examples,
+)
+
 # ----------------------------- Amazon Reviews ---------------------------------
 amazon_reviews_train_tasks = []
 amazon_reviews_eval_tasks = []
