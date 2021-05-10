@@ -195,6 +195,98 @@ class PreprocessorsTest(absltest.TestCase):
         }
     )
 
+  def test_circa_nli_relaxed(self):
+    input_data = {
+        'question_x': 'Question?',
+        'canquestion_x': 'Question.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 'I am not sure how X will interpret Y\'s answer',
+        'goldstandard2': 'In the middle, neither yes nor no',
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.nli,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        explain=False
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': 'nli hypothesis: Question. premise: Answer.',
+            'targets': 'neutral'
+        }
+    )
+
+  def test_circa_nli_strict(self):
+    input_data = {
+        'question_x': 'Question?',
+        'canquestion_x': 'Question.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 'I am not sure how X will interpret Y\'s answer',
+        'goldstandard2': 'In the middle, neither yes nor no',
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.nli,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        explain=False
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': 'nli hypothesis: Question. premise: Answer.',
+            'targets': 'none'
+        }
+    )
+
+  def test_circa_nli_explain_relaxed(self):
+    input_data = {
+        'question_x': 'Question?',
+        'canquestion_x': 'Question.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 'Probably yes / sometimes yes',
+        'goldstandard2': 'Yes',
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.nli,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        explain=True
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': 'explain nli hypothesis: Question. premise: Answer.',
+            'targets': 'entailment'
+        }
+    )
+
+  def test_circa_nli_explain_strict(self):
+    input_data = {
+        'question_x': 'Question?',
+        'canquestion_x': 'Question.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 'Probably yes / sometimes yes',
+        'goldstandard2': 'Yes',
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.nli,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        explain=True
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': 'explain nli hypothesis: Question. premise: Answer.',
+            'targets': 'none'
+        }
+    )
+
   def test_rationales_preprocessor(self):
     input_data = {
         'review': 'This was a terrible movie. Complete waste of time.',

@@ -15,6 +15,7 @@
 
 """WT5 preprocessors."""
 import tensorflow.compat.v1 as tf
+from enum import Enum
 
 
 def _explanation_targets(answer, explanations, prefix='explanation:'):
@@ -169,6 +170,86 @@ def esnli(
       targets = _explanation_targets(class_label, explanations)
 
     return {'inputs': inputs, 'targets': targets}
+
+  return dataset.map(my_fn, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+
+
+class CircaPrefixes(Enum):
+  nli = 'nli'
+
+class CircaAggregationSchemes(Enum):
+  strict = 'strict'
+  relaxed = 'relaxed'
+
+def circa(
+    dataset,
+    prefix: CircaPrefixes = CircaPrefixes.nli,
+    aggregation_scheme: CircaAggregationSchemes = CircaAggregationSchemes.strict,
+    explain: bool = False
+    ):
+  """Preprocessor to handle the Circa dataset """
+  full_prefix = 'explain ' if explain else ''
+  full_prefix += prefix.value
+
+  circa_labels = [
+    'yes',
+    'no',
+    'in the middle, neither yes nor no',
+    'probably yes / sometimes yes',
+    'yes, subject to some conditions',
+    'probably no',
+    'i am not sure how x will interpret y\'s answer',
+    'na',
+    'other'
+  ]
+
+  circa_nli_labels_strict = [
+    'entailment',
+    'contradiction',
+    'neutral',
+    'none',
+    'none',
+    'none',
+    'none',
+    'none',
+    'none'
+  ]
+
+  circa_nli_labels_relaxed = [
+    'entailment',
+    'contradiction',
+    'neutral',
+    'entailment',
+    'none',
+    'contradiction',
+    'neutral',
+    'none',
+    'none'
+  ]
+
+  nli_table_strict = tf.lookup.StaticHashTable(
+    tf.lookup.KeyValueTensorInitializer(circa_labels, circa_nli_labels_strict),
+    default_value='none'
+  )
+
+  nli_table_relaxed = tf.lookup.StaticHashTable(
+    tf.lookup.KeyValueTensorInitializer(circa_labels, circa_nli_labels_relaxed),
+    default_value='none'
+  )
+
+  def my_fn(x):
+    if prefix == CircaPrefixes.nli:
+      inputs = tf.strings.join(
+          [full_prefix, 'hypothesis:', x['canquestion_x'], 'premise:', x['answer_y']],
+          separator=' ')
+      if aggregation_scheme == CircaAggregationSchemes.strict:
+        class_label = nli_table_strict.lookup(tf.strings.lower(x['goldstandard1']))
+      else:
+        class_label = nli_table_relaxed.lookup(tf.strings.lower(x['goldstandard2']))
+    else:
+      raise TypeError("Currently only the 'nli' evaluation scheme is available")
+
+    return {'inputs': inputs, 'targets': class_label}
 
   return dataset.map(my_fn, num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
