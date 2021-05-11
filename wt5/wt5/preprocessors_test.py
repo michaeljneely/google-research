@@ -200,8 +200,8 @@ class PreprocessorsTest(absltest.TestCase):
         'question_x': 'Question?',
         'canquestion_x': 'Question.',
         'answer_y': 'Answer.',
-        'goldstandard1': 'I am not sure how X will interpret Y\'s answer',
-        'goldstandard2': 'In the middle, neither yes nor no',
+        'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
+        'goldstandard2': 3 # 'In the middle, neither yes nor no'
     }
     og_dataset = tf.data.Dataset.from_tensors(input_data)
     dataset = preprocessors.circa(
@@ -223,8 +223,8 @@ class PreprocessorsTest(absltest.TestCase):
         'question_x': 'Question?',
         'canquestion_x': 'Question.',
         'answer_y': 'Answer.',
-        'goldstandard1': 'I am not sure how X will interpret Y\'s answer',
-        'goldstandard2': 'In the middle, neither yes nor no',
+        'goldstandard1': 6, # 'I am not sure how X will interpret Y\'s answer'
+        'goldstandard2': 3 # 'In the middle, neither yes nor no'
     }
     og_dataset = tf.data.Dataset.from_tensors(input_data)
     dataset = preprocessors.circa(
@@ -246,8 +246,8 @@ class PreprocessorsTest(absltest.TestCase):
         'question_x': 'Question?',
         'canquestion_x': 'Question.',
         'answer_y': 'Answer.',
-        'goldstandard1': 'Probably yes / sometimes yes',
-        'goldstandard2': 'Yes',
+        'goldstandard1': 1, # 'Probably yes / sometimes yes',
+        'goldstandard2': 0 # 'Yes'
     }
     og_dataset = tf.data.Dataset.from_tensors(input_data)
     dataset = preprocessors.circa(
@@ -269,8 +269,8 @@ class PreprocessorsTest(absltest.TestCase):
         'question_x': 'Question?',
         'canquestion_x': 'Question.',
         'answer_y': 'Answer.',
-        'goldstandard1': 'Probably yes / sometimes yes',
-        'goldstandard2': 'Yes',
+        'goldstandard1': 1, # 'Probably yes / sometimes yes'
+        'goldstandard2': 0 #'Yes'
     }
     og_dataset = tf.data.Dataset.from_tensors(input_data)
     dataset = preprocessors.circa(

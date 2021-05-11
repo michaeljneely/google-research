@@ -298,6 +298,83 @@ for mnli_eval_set in ("matched", "mismatched"):
   )
 # pylint: enable=protected-access
 
+# ======================== Circa ===============================
+TaskRegistry.add(
+    "circa_nli_relaxed_eval_v100",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["train"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            explain=False),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[t5_metrics.accuracy],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+TaskRegistry.add(
+    "circa_nli_relaxed_expln_eval_v100",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["train"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            explain=True),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[t5_metrics.accuracy],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+TaskRegistry.add(
+    "circa_nli_strict_eval_v100",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["train"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+            explain=False),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[t5_metrics.accuracy],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+TaskRegistry.add(
+    "circa_nli_strict_expln_eval_v100",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["train"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+            explain=True),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[t5_metrics.accuracy],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
 # ======================== Movie Rationales ======================
 TaskRegistry.add(
     "movie_rationales_v010",

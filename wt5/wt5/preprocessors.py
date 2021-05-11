@@ -191,25 +191,13 @@ def circa(
   full_prefix = 'explain ' if explain else ''
   full_prefix += prefix.value
 
-  circa_labels = [
-    'yes',
-    'no',
-    'in the middle, neither yes nor no',
-    'probably yes / sometimes yes',
-    'yes, subject to some conditions',
-    'probably no',
-    'i am not sure how x will interpret y\'s answer',
-    'na',
-    'other'
-  ]
-
   circa_nli_labels_strict = [
     'entailment',
+    'none',
+    'none',
     'contradiction',
+    'none',
     'neutral',
-    'none',
-    'none',
-    'none',
     'none',
     'none',
     'none'
@@ -217,9 +205,6 @@ def circa(
 
   circa_nli_labels_relaxed = [
     'entailment',
-    'contradiction',
-    'neutral',
-    'entailment',
     'none',
     'contradiction',
     'neutral',
@@ -227,25 +212,16 @@ def circa(
     'none'
   ]
 
-  nli_table_strict = tf.lookup.StaticHashTable(
-    tf.lookup.KeyValueTensorInitializer(circa_labels, circa_nli_labels_strict),
-    default_value='none'
-  )
-
-  nli_table_relaxed = tf.lookup.StaticHashTable(
-    tf.lookup.KeyValueTensorInitializer(circa_labels, circa_nli_labels_relaxed),
-    default_value='none'
-  )
-
   def my_fn(x):
+    # TODO: support QA or classification variant
     if prefix == CircaPrefixes.nli:
       inputs = tf.strings.join(
           [full_prefix, 'hypothesis:', x['canquestion_x'], 'premise:', x['answer_y']],
           separator=' ')
       if aggregation_scheme == CircaAggregationSchemes.strict:
-        class_label = nli_table_strict.lookup(tf.strings.lower(x['goldstandard1']))
+        class_label = tf.gather(circa_nli_labels_strict, x['goldstandard1'])
       else:
-        class_label = nli_table_relaxed.lookup(tf.strings.lower(x['goldstandard2']))
+        class_label = tf.gather(circa_nli_labels_relaxed, x['goldstandard2'])
     else:
       raise TypeError("Currently only the 'nli' evaluation scheme is available")
 

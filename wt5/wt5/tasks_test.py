@@ -42,6 +42,8 @@ _TASKS = [
     'cos_e_v001_0_expln_like_esnli',
     'cos_e_explanations_take100_v001',
     'cos_e_labels_skip100_v001',
+    'circa_nli_relaxed_eval_v100',
+    'circa_nli_strict_expln_eval_v100',
     'movie_rationales_v010',
     'movie_rationales_v010_no_expl',
     'imdb_reviews_v100',
