@@ -1,0 +1,8 @@
+# -*-Python-*-
+
+# Actual max lengths from Circa after preprocessing are:
+# max_inputs: ~60
+# max_targets: Unknown, but can't be much more than max inputs
+# Rounding up to next power-of-two composite.
+
+utils.run.sequence_length = {'inputs': 96, 'targets': 96}
