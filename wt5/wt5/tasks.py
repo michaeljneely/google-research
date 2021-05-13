@@ -302,7 +302,7 @@ for mnli_eval_set in ("matched", "mismatched"):
 
 # Circa - Relaxed, Matched
 TaskRegistry.add(
-    "circa_v100_nli_relaxed_matched_13",
+    "circa_v100_nli_relaxed_matched13",
     source=seqio.TfdsDataSource(
         tfds_name="circa_matched13:1.0.0", splits=["train"]),
     preprocessors=[
