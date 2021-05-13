@@ -22,6 +22,8 @@ import tensorflow.compat.v1 as tf
 
 from wt5.wt5 import preprocessors
 
+CIRCA_RELAXED_CHOICES = 'choice: Yes choice: Yes, subject to some conditions choice: No choice: In the middle, neither yes nor no choice: NA choice: Other'
+CIRCA_STRICT_CHOICES = 'choice: Yes choice: Probably yes / sometimes yes choice: Yes, subject to some conditions choice: No choice: Probably no choice: In the middle, neither yes nor no choice: I am not sure how X will interpret Y\'s answer choice: NA choice: Other'
 
 class PreprocessorsTest(absltest.TestCase):
 
@@ -286,6 +288,95 @@ class PreprocessorsTest(absltest.TestCase):
             'targets': 'none'
         }
     )
+
+  def test_circa_qa_relaxed(self):
+    input_data = {
+        'question_x': 'Question?',
+        'answer_y': 'Answer.',
+        'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
+        'goldstandard2': 3 # 'In the middle, neither yes nor no'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.qa,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        explain=False
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': f'circa question: Question? answer: Answer. {CIRCA_RELAXED_CHOICES}',
+            'targets': 'In the middle, neither yes nor no'
+        }
+    )
+
+  def test_circa_qa_strict(self):
+    input_data = {
+        'question_x': 'Question?',
+        'answer_y': 'Answer.',
+        'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
+        'goldstandard2': 3 # 'In the middle, neither yes nor no'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.qa,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        explain=False
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': f'circa question: Question? answer: Answer. {CIRCA_STRICT_CHOICES}',
+            'targets': 'I am not sure how X will interpret Y\'s answer'
+        }
+    )
+
+  def test_circa_qa_explain_relaxed(self):
+    input_data = {
+        'question_x': 'Question?',
+        'answer_y': 'Answer.',
+        'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
+        'goldstandard2': 3 # 'In the middle, neither yes nor no'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.qa,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        explain=True
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': f'explain circa question: Question? answer: Answer. {CIRCA_RELAXED_CHOICES}',
+            'targets': 'In the middle, neither yes nor no'
+        }
+    )
+
+  def test_circa_qa_explain_strict(self):
+    input_data = {
+        'question_x': 'Question?',
+        'answer_y': 'Answer.',
+        'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
+        'goldstandard2': 3 # 'In the middle, neither yes nor no'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.qa,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        explain=True
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': f'explain circa question: Question? answer: Answer. {CIRCA_STRICT_CHOICES}',
+            'targets': 'I am not sure how X will interpret Y\'s answer'
+        }
+    )
+
 
   def test_rationales_preprocessor(self):
     input_data = {

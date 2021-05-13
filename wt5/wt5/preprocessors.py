@@ -174,8 +174,11 @@ def esnli(
   return dataset.map(my_fn, num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
 
+## ===== Circa === ##
+
 class CircaPrefixes(Enum):
   nli = 'nli'
+  qa = 'circa'
 
 class CircaAggregationSchemes(Enum):
   strict = 'strict'
@@ -187,7 +190,74 @@ def circa(
     aggregation_scheme: CircaAggregationSchemes = CircaAggregationSchemes.strict,
     explain: bool = False
     ):
-  """Preprocessor to handle the Circa dataset """
+  """Convert the Circa dataset to a text-to-text dataset.
+
+  The Circa dataset contains instances of the following format:
+
+  {
+    'id': 34267
+    'context': 'Y has just told X that he/she is thinking of buying a flat in New York.',
+    'question_x': 'Do you see yourself raising a family in New York?',
+    'canquestion_x': 'I see myself raising a family in New York.',
+    'answer_y': 'I will never have a family.',
+    'judgments': 'No#No#No#No#No',
+    'goldstandard1': 'No',
+    'goldstandard2': 'No'
+  }
+
+  Goldstandard labels can be 'strict' (goldstandard1):
+    Yes
+    Probably yes / sometimes yes
+    Yes, subject to some conditions
+    No
+    Probably no
+    In the middle, neither yes nor no
+    I am not sure how X will interpret Y's answer
+    NA
+    Other
+
+  Alternatively, goldstandard labels can be 'relaxed' (goldstandard2):
+    Yes
+    Yes, subject to some conditions
+    No
+    In the middle, neither yes nor no
+    NA
+    Other
+
+  We can turn this into a variety of formats, both of which can optionally request explanations.
+  There are no references with which to evaluate the quality of predicted explanations.
+
+  1) Natural Language Inference
+    {
+        'inputs': 'explain nli premise: I see myself raising a family in New York.
+                   hypothesis: I will never have a family.'
+        'targets': 'contradiction',
+        'prediction': 'contradiction explanation: Abstractive explanation'
+    }
+
+  2) Question Answering
+    {
+        'inputs': 'explain circa question: Do you see yourself raising a family in New York?
+                   answer: I will never have a family. 
+                   choice: Yes
+                   choice: Yes, subject to some conditions
+                   choice: No
+                   choice: In the middle, neither yes nor no
+                   choice: NA
+                   choice: Other
+        'targets': No
+        'prediction': No. explanation: Abstractive explanation'
+    }
+
+  Args:
+    dataset: a tf.data.Dataset to process.
+    prefix: CircaPrefixes, one of the supported Circa prefixes
+    aggregation_scheme: CircaAggregationSchemes, relaxed or strict evaluation
+
+  Returns:
+    a tf.data.Dataset
+  """
+
   full_prefix = 'explain ' if explain else ''
   full_prefix += prefix.value
 
@@ -212,8 +282,30 @@ def circa(
     'none'
   ]
 
+  circa_qa_choices_strict = [
+    "Yes",
+    "Probably yes / sometimes yes",
+    "Yes, subject to some conditions",
+    "No",
+    "Probably no",
+    "In the middle, neither yes nor no",
+    "I am not sure how X will interpret Y's answer",
+    "NA",
+    "Other"
+  ]
+
+  circa_qa_choices_relaxed = [
+    "Yes",
+    "Yes, subject to some conditions",
+    "No",
+    "In the middle, neither yes nor no",
+    "NA",
+    "Other"
+  ]
+
   def my_fn(x):
-    # TODO: support QA or classification variant
+
+    # NLI Variant
     if prefix == CircaPrefixes.nli:
       inputs = tf.strings.join(
           [full_prefix, 'hypothesis:', x['canquestion_x'], 'premise:', x['answer_y']],
@@ -222,8 +314,34 @@ def circa(
         class_label = tf.gather(circa_nli_labels_strict, x['goldstandard1'])
       else:
         class_label = tf.gather(circa_nli_labels_relaxed, x['goldstandard2'])
+
+    # QA Variant
+    elif prefix == CircaPrefixes.qa:
+      if aggregation_scheme == CircaAggregationSchemes.strict:
+        choices_text = tf.convert_to_tensor(circa_qa_choices_strict)
+        choices_text = tf.strings.reduce_join('choice: ' + choices_text, separator=' ')
+        inputs = tf.strings.join([
+          full_prefix,
+          'question:',
+          x['question_x'],
+          'answer:',
+          x['answer_y'],
+          choices_text], separator=' ')
+        class_label = tf.gather(circa_qa_choices_strict, x['goldstandard1'])
+      else:
+        choices_text = tf.convert_to_tensor(circa_qa_choices_relaxed)
+        choices_text = tf.strings.reduce_join('choice: ' + choices_text, separator=' ')
+        inputs = tf.strings.join([
+          full_prefix,
+          'question:',
+          x['question_x'],
+          'answer:',
+          x['answer_y'],
+          choices_text], separator=' ')
+        class_label = tf.gather(circa_qa_choices_relaxed, x['goldstandard2'])
+
     else:
-      raise TypeError("Currently only the 'nli' evaluation scheme is available")
+      raise TypeError("Scheme not available")
 
     return {'inputs': inputs, 'targets': class_label}
 
