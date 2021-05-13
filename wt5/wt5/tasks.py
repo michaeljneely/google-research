@@ -301,9 +301,10 @@ for mnli_eval_set in ("matched", "mismatched"):
 # ======================== Circa ===============================
 
 # Circa - Relaxed, Matched
+# TODO: figure out why we need to manually specify all three splits. Other datasets seem to include them by default :(
 TaskRegistry.add(
     "circa_v100_0_expln_nli_relaxed_matched13",
-    source=seqio.TfdsDataSource(tfds_name="circa_matched13:1.0.0"),
+    source=seqio.TfdsDataSource(tfds_name="circa_matched13:1.0.0", splits=["train", "validation", "test"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -340,7 +341,7 @@ TaskRegistry.add(
 
 TaskRegistry.add(
     "circa_v100_0_expln_nli_relaxed_matched948",
-    source=seqio.TfdsDataSource(tfds_name="circa_matched948:1.0.0"),
+    source=seqio.TfdsDataSource(tfds_name="circa_matched948:1.0.0", splits=["train", "validation", "test"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -377,7 +378,7 @@ TaskRegistry.add(
 
 TaskRegistry.add(
     "circa_v100_0_expln_nli_relaxed_matched2756",
-    source=seqio.TfdsDataSource(tfds_name="circa_matched2756:1.0.0"),
+    source=seqio.TfdsDataSource(tfds_name="circa_matched2756:1.0.0", splits=["train", "validation", "test"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -415,7 +416,7 @@ TaskRegistry.add(
 # Circa - Strict, Matched
 TaskRegistry.add(
     "circa_v100_0_expln_nli_strict_matched13",
-    source=seqio.TfdsDataSource(tfds_name="circa_matched13:1.0.0"),
+    source=seqio.TfdsDataSource(tfds_name="circa_matched13:1.0.0", splits=["train", "validation", "test"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -452,7 +453,7 @@ TaskRegistry.add(
 
 TaskRegistry.add(
     "circa_v100_0_expln_nli_strict_matched948",
-    source=seqio.TfdsDataSource(tfds_name="circa_matched948:1.0.0"),
+    source=seqio.TfdsDataSource(tfds_name="circa_matched948:1.0.0", splits=["train", "validation", "test"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -489,7 +490,7 @@ TaskRegistry.add(
 
 TaskRegistry.add(
     "circa_v100_0_expln_nli_strict_matched2756",
-    source=seqio.TfdsDataSource(tfds_name="circa_matched2756:1.0.0"),
+    source=seqio.TfdsDataSource(tfds_name="circa_matched2756:1.0.0", splits=["train", "validation", "test"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
