@@ -5,4 +5,4 @@
 # max_targets: Unknown, but can't be much more than max inputs
 # Rounding up to next power-of-two composite.
 
-utils.run.sequence_length = {'inputs': 96, 'targets': 96}
+utils.run.sequence_length = {'inputs': 128, 'targets': 96}
