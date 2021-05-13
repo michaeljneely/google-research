@@ -300,6 +300,7 @@ for mnli_eval_set in ("matched", "mismatched"):
 
 # ======================== Circa ===============================
 
+# Circa - Relaxed, Matched
 TaskRegistry.add(
     "circa_v100_nli_relaxed_matched_13",
     source=seqio.TfdsDataSource(
@@ -414,6 +415,120 @@ TaskRegistry.add(
     postprocess_fn=postprocessors.abstractive_explanations,
 )
 
+# Circa - Strict, Matched
+TaskRegistry.add(
+    "circa_v100_nli_strict_matched_13",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["train-matched-13"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+            explain=False),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+TaskRegistry.add(
+    "circa_eval_v100_nli_strict_matched_13",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["val-matched-13"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+            explain=False),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+TaskRegistry.add(
+    "circa_v100_nli_strict_matched_948",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["train-matched-948"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+            explain=False),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+TaskRegistry.add(
+    "circa_eval_v100_nli_strict_matched_948",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["val-matched-948"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+            explain=False),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+TaskRegistry.add(
+    "circa_v100_nli_strict_matched_2756",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["train-matched-2756"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+            explain=False),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+TaskRegistry.add(
+    "circa_eval_v100_nli_strict_matched_2756",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["val-matched-2756"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+            explain=False),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
 # ======================== Movie Rationales ======================
 TaskRegistry.add(
     "movie_rationales_v010",
