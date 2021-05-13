@@ -51,6 +51,21 @@ TaskRegistry.add(
     output_features=DEFAULT_OUTPUT_FEATURES,
     metric_fns=[metrics.esnli_metric])
 
+TaskRegistry.add(
+    "cos_e_v001_0_expln",
+    source=seqio.TfdsDataSource(tfds_name="cos_e:0.0.1"),
+    preprocessors=[
+        functools.partial(
+            preprocessors.cos_e,
+            drop_explanatins=True),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    postprocess_fn=postprocessors.abstractive_explanations,
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    metric_fns=[metrics.circa_qa_metrics])
+
 # CoS-E with no explanations, and modified prefixes like e-SNLI.
 TaskRegistry.add(
     "cos_e_v001_0_expln_like_esnli",
@@ -549,7 +564,7 @@ TaskRegistry.add(
 )
 
 TaskRegistry.add(
-    "circa_eval_v100_nli_relaxed_matched13",
+    "circa_eval_v100_qa_relaxed_matched13",
     source=seqio.TfdsDataSource(
         tfds_name="circa_matched13:1.0.0", splits=["validation", "test"]),
     preprocessors=[
