@@ -90,20 +90,27 @@ def circa_nli_metrics(targets, predictions):
   Returns:
     a dict with accuracy and weighted F1 scores (and eventually more metrics)
   """
-  def get_label(answers):
+  def get_labels_and_explanations(answers):
     """Helper function to get lists of labels and explanations from a dict."""
     labels = []
+    explanations = []
     for answer in answers:
       for key, value in answer.items():
         if key == "label":
           labels.append(value)
+        elif key == "explanations":
+          explanations.append("" if not value else value)
         else:
           raise RuntimeError(
               "Unexpected key:%s provided. to metric fn." % (key))
-  target_labels = get_label(targets)
-  prediction_labels = get_label(predictions)
+    return labels, explanations
+
+  target_labels, target_explanations = get_labels_and_explanations(targets)
+  prediction_labels, prediction_explanations = get_labels_and_explanations(predictions)
 
   circa_labels = ["entailment", "neutral", "contradiction"]
+
+  #TODO: add some metric on the explanations
 
   return {
       "accuracy": 100 * sklearn.metrics.accuracy_score(
