@@ -300,7 +300,9 @@ for mnli_eval_set in ("matched", "mismatched"):
 
 # ======================== Circa ===============================
 
-# Circa - Relaxed, Matched
+## == Circa NLI Format ##
+
+# Circa - NLI, Relaxed, Matched
 # TODO: figure out why we need to manually specify all three splits. Other datasets seem to include them by default :(
 TaskRegistry.add(
     "circa_v100_0_expln_nli_relaxed_matched13",
@@ -413,7 +415,7 @@ TaskRegistry.add(
     postprocess_fn=postprocessors.abstractive_explanations,
 )
 
-# Circa - Strict, Matched
+# Circa - NLI, Strict, Matched
 TaskRegistry.add(
     "circa_v100_0_expln_nli_strict_matched13",
     source=seqio.TfdsDataSource(tfds_name="circa_matched13:1.0.0", splits=["train", "validation", "test"]),
@@ -524,6 +526,47 @@ TaskRegistry.add(
     output_features=DEFAULT_OUTPUT_FEATURES,
     postprocess_fn=postprocessors.abstractive_explanations,
 )
+
+## == Circa NLI Format ##
+
+# Circa - QA, Relaxed, Matched
+TaskRegistry.add(
+    "circa_v100_0_expln_qa_relaxed_matched13",
+    source=seqio.TfdsDataSource(tfds_name="circa_matched13:1.0.0", splits=["train", "validation", "test"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.qa,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            explain=False),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_qa_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+TaskRegistry.add(
+    "circa_eval_v100_nli_relaxed_matched13",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa_matched13:1.0.0", splits=["validation", "test"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.qa,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            explain=True),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_qa_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
 # ======================== Movie Rationales ======================
 TaskRegistry.add(
     "movie_rationales_v010",
