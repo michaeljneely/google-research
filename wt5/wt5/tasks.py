@@ -57,7 +57,7 @@ TaskRegistry.add(
     preprocessors=[
         functools.partial(
             preprocessors.cos_e,
-            drop_explanatins=True),
+            drop_explanations=True),
         seqio.preprocessors.tokenize,
         seqio.CacheDatasetPlaceholder(),
         seqio.preprocessors.append_eos_after_trim,
