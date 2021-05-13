@@ -131,7 +131,7 @@ MixtureRegistry.add(
      ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE),
      ("circa_v100_nli_relaxed_matched_13", CIRCA_TRAIN_SIZE),
-     ("circa_eval_v100_nli_relaxed_matched_13"), CIRCA_VAL_SIZE],
+     ("circa_eval_v100_nli_relaxed_matched_13", CIRCA_VAL_SIZE)],
     default_rate=_rate_num_input_examples,
 )
 
@@ -142,7 +142,7 @@ MixtureRegistry.add(
      ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE),
      ("circa_v100_nli_relaxed_matched_948", CIRCA_TRAIN_SIZE),
-     ("circa_eval_v100_nli_relaxed_matched_948"), CIRCA_VAL_SIZE],
+     ("circa_eval_v100_nli_relaxed_matched_948", CIRCA_VAL_SIZE)],
     default_rate=_rate_num_input_examples,
 )
 
@@ -153,7 +153,7 @@ MixtureRegistry.add(
      ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE),
      ("circa_v100_nli_relaxed_matched_2756", CIRCA_TRAIN_SIZE),
-     ("circa_eval_v100_nli_relaxed_matched_2756"), CIRCA_VAL_SIZE],
+     ("circa_eval_v100_nli_relaxed_matched_2756", CIRCA_VAL_SIZE)],
     default_rate=_rate_num_input_examples,
 )
 
@@ -165,7 +165,7 @@ MixtureRegistry.add(
      ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE),
      ("circa_v100_nli_strict_matched_13", CIRCA_TRAIN_SIZE),
-     ("circa_eval_v100_nli_strict_matched_13"), CIRCA_VAL_SIZE],
+     ("circa_eval_v100_nli_strict_matched_13", CIRCA_VAL_SIZE)],
     default_rate=_rate_num_input_examples,
 )
 
@@ -176,7 +176,7 @@ MixtureRegistry.add(
      ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE),
      ("circa_v100_nli_strict_matched_948", CIRCA_TRAIN_SIZE),
-     ("circa_eval_v100_nli_strict_matched_948"), CIRCA_VAL_SIZE],
+     ("circa_eval_v100_nli_strict_matched_948", CIRCA_VAL_SIZE)],
     default_rate=_rate_num_input_examples,
 )
 
@@ -187,7 +187,7 @@ MixtureRegistry.add(
      ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE),
      ("circa_v100_nli_strict_matched_2756", CIRCA_TRAIN_SIZE),
-     ("circa_eval_v100_nli_strict_matched_2756"), CIRCA_VAL_SIZE],
+     ("circa_eval_v100_nli_strict_matched_2756", CIRCA_VAL_SIZE)],
     default_rate=_rate_num_input_examples,
 )
 
