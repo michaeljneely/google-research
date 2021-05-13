@@ -304,7 +304,7 @@ for mnli_eval_set in ("matched", "mismatched"):
 TaskRegistry.add(
     "circa_v100_nli_relaxed_matched_13",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["train-matched-13"]),
+        tfds_name="circa_matched13:1.0.0", splits=["train"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -321,9 +321,9 @@ TaskRegistry.add(
 )
 
 TaskRegistry.add(
-    "circa_eval_v100_nli_relaxed_matched_13",
+    "circa_eval_v100_nli_relaxed_matched13",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["val-matched-13"]),
+        tfds_name="circa_matched13:1.0.0", splits=["val"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -340,9 +340,9 @@ TaskRegistry.add(
 )
 
 TaskRegistry.add(
-    "circa_v100_nli_relaxed_matched_948",
+    "circa_v100_nli_relaxed_matched948",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["train-matched-948"]),
+        tfds_name="circa_matched948:1.0.0", splits=["train"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -359,9 +359,9 @@ TaskRegistry.add(
 )
 
 TaskRegistry.add(
-    "circa_eval_v100_nli_relaxed_matched_948",
+    "circa_eval_v100_nli_relaxed_matched948",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["val-matched-948"]),
+        tfds_name="circa_matched948:1.0.0", splits=["val"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -378,9 +378,9 @@ TaskRegistry.add(
 )
 
 TaskRegistry.add(
-    "circa_v100_nli_relaxed_matched_2756",
+    "circa_v100_nli_relaxed_matched2756",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["train-matched-2756"]),
+        tfds_name="circa_matched2756:1.0.0", splits=["train"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -397,9 +397,9 @@ TaskRegistry.add(
 )
 
 TaskRegistry.add(
-    "circa_eval_v100_nli_relaxed_matched_2756",
+    "circa_eval_v100_nli_relaxed_matched2756",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["val-matched-2756"]),
+        tfds_name="circa_matched2756:1.0.0", splits=["val"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -417,9 +417,9 @@ TaskRegistry.add(
 
 # Circa - Strict, Matched
 TaskRegistry.add(
-    "circa_v100_nli_strict_matched_13",
+    "circa_v100_nli_strict_matched13",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["train-matched-13"]),
+        tfds_name="circa_matched13:1.0.0", splits=["train"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -436,9 +436,9 @@ TaskRegistry.add(
 )
 
 TaskRegistry.add(
-    "circa_eval_v100_nli_strict_matched_13",
+    "circa_eval_v100_nli_strict_matched13",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["val-matched-13"]),
+        tfds_name="circa_matched13:1.0.0", splits=["val"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -455,9 +455,9 @@ TaskRegistry.add(
 )
 
 TaskRegistry.add(
-    "circa_v100_nli_strict_matched_948",
+    "circa_v100_nli_strict_matched948",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["train-matched-948"]),
+        tfds_name="circa_matched948:1.0.0", splits=["train"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -474,9 +474,9 @@ TaskRegistry.add(
 )
 
 TaskRegistry.add(
-    "circa_eval_v100_nli_strict_matched_948",
+    "circa_eval_v100_nli_strict_matched948",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["val-matched-948"]),
+        tfds_name="circa_matched948:1.0.0", splits=["val"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -493,9 +493,9 @@ TaskRegistry.add(
 )
 
 TaskRegistry.add(
-    "circa_v100_nli_strict_matched_2756",
+    "circa_v100_nli_strict_matched2756",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["train-matched-2756"]),
+        tfds_name="circa_matched2756:1.0.0", splits=["train"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -512,9 +512,9 @@ TaskRegistry.add(
 )
 
 TaskRegistry.add(
-    "circa_eval_v100_nli_strict_matched_2756",
+    "circa_eval_v100_nli_strict_matched2756",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["val-matched-2756"]),
+        tfds_name="circa_matched2756:1.0.0", splits=["val"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,

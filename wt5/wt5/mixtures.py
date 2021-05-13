@@ -125,69 +125,69 @@ CIRCA_VAL_SIZE = 6853 # same as test size
 
 # Relaxed, Matched, NLI Setting for each seed
 MixtureRegistry.add(
-    "esnli_and_cos_e_to_circa_nli_relaxed_matched_13",
+    "esnli_and_cos_e_to_circa_nli_relaxed_matched13",
     [("esnli_v010", ESNLI_SIZE),
      ("esnli_v010_0_expln", ESNLI_SIZE),
      ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE),
-     ("circa_v100_nli_relaxed_matched_13", CIRCA_TRAIN_SIZE),
-     ("circa_eval_v100_nli_relaxed_matched_13", CIRCA_VAL_SIZE)],
+     ("circa_v100_nli_relaxed_matched13", CIRCA_TRAIN_SIZE),
+     ("circa_eval_v100_nli_relaxed_matched13", CIRCA_VAL_SIZE)],
     default_rate=_rate_num_input_examples,
 )
 
 MixtureRegistry.add(
-    "esnli_and_cos_e_to_circa_nli_relaxed_matched_948",
+    "esnli_and_cos_e_to_circa_nli_relaxed_matched948",
     [("esnli_v010", ESNLI_SIZE),
      ("esnli_v010_0_expln", ESNLI_SIZE),
      ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE),
-     ("circa_v100_nli_relaxed_matched_948", CIRCA_TRAIN_SIZE),
-     ("circa_eval_v100_nli_relaxed_matched_948", CIRCA_VAL_SIZE)],
+     ("circa_v100_nli_relaxed_matched948", CIRCA_TRAIN_SIZE),
+     ("circa_eval_v100_nli_relaxed_matched948", CIRCA_VAL_SIZE)],
     default_rate=_rate_num_input_examples,
 )
 
 MixtureRegistry.add(
-    "esnli_and_cos_e_to_circa_nli_relaxed_matched_2756",
+    "esnli_and_cos_e_to_circa_nli_relaxed_matched2756",
     [("esnli_v010", ESNLI_SIZE),
      ("esnli_v010_0_expln", ESNLI_SIZE),
      ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE),
-     ("circa_v100_nli_relaxed_matched_2756", CIRCA_TRAIN_SIZE),
-     ("circa_eval_v100_nli_relaxed_matched_2756", CIRCA_VAL_SIZE)],
+     ("circa_v100_nli_relaxed_matched2756", CIRCA_TRAIN_SIZE),
+     ("circa_eval_v100_nli_relaxed_matched2756", CIRCA_VAL_SIZE)],
     default_rate=_rate_num_input_examples,
 )
 
 # Strict, Matched, NLI Setting for each seed
 MixtureRegistry.add(
-    "esnli_and_cos_e_to_circa_nli_strict_matched_13",
+    "esnli_and_cos_e_to_circa_nli_strict_matched13",
     [("esnli_v010", ESNLI_SIZE),
      ("esnli_v010_0_expln", ESNLI_SIZE),
      ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE),
-     ("circa_v100_nli_strict_matched_13", CIRCA_TRAIN_SIZE),
-     ("circa_eval_v100_nli_strict_matched_13", CIRCA_VAL_SIZE)],
+     ("circa_v100_nli_strict_matched13", CIRCA_TRAIN_SIZE),
+     ("circa_eval_v100_nli_strict_matched13", CIRCA_VAL_SIZE)],
     default_rate=_rate_num_input_examples,
 )
 
 MixtureRegistry.add(
-    "esnli_and_cos_e_to_circa_nli_strict_matched_948",
+    "esnli_and_cos_e_to_circa_nli_strict_matched948",
     [("esnli_v010", ESNLI_SIZE),
      ("esnli_v010_0_expln", ESNLI_SIZE),
      ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE),
-     ("circa_v100_nli_strict_matched_948", CIRCA_TRAIN_SIZE),
-     ("circa_eval_v100_nli_strict_matched_948", CIRCA_VAL_SIZE)],
+     ("circa_v100_nli_strict_matched948", CIRCA_TRAIN_SIZE),
+     ("circa_eval_v100_nli_strict_matched948", CIRCA_VAL_SIZE)],
     default_rate=_rate_num_input_examples,
 )
 
 MixtureRegistry.add(
-    "esnli_and_cos_e_to_circa_nli_strict_matched_2756",
+    "esnli_and_cos_e_to_circa_nli_strict_matched2756",
     [("esnli_v010", ESNLI_SIZE),
      ("esnli_v010_0_expln", ESNLI_SIZE),
      ("cos_e_v001_like_esnli", COS_E_SIZE),
      ("cos_e_v001_0_expln_like_esnli", COS_E_SIZE),
-     ("circa_v100_nli_strict_matched_2756", CIRCA_TRAIN_SIZE),
-     ("circa_eval_v100_nli_strict_matched_2756", CIRCA_VAL_SIZE)],
+     ("circa_v100_nli_strict_matched2756", CIRCA_TRAIN_SIZE),
+     ("circa_eval_v100_nli_strict_matched2756", CIRCA_VAL_SIZE)],
     default_rate=_rate_num_input_examples,
 )
 
