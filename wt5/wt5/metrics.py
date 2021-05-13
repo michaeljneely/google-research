@@ -79,6 +79,43 @@ def esnli_metric(targets, predictions):
           get_first_explanation_length(prediction_explanations)
   }
 
+def circa_nli_metrics(targets, predictions):
+  """Compute label accuracy and weighed F1 for Circa nli predictions.
+
+  TODO: add more metrics
+
+  Args:
+    targets: list of dict of label and explanation
+    predictions: list of dict of label and explanation
+  Returns:
+    a dict with accuracy and weighted F1 scores (and eventually more metrics)
+  """
+  def get_label(answers):
+    """Helper function to get lists of labels and explanations from a dict."""
+    labels = []
+    for answer in answers:
+      for key, value in answer.items():
+        if key == "label":
+          labels.append(value)
+        else:
+          raise RuntimeError(
+              "Unexpected key:%s provided. to metric fn." % (key))
+  target_labels = get_label(targets)
+  prediction_labels = get_label(predictions)
+
+  circa_labels = ["entailment", "neutral", "contradiction"]
+
+  return {
+      "accuracy": 100 * sklearn.metrics.accuracy_score(
+          target_labels,
+          prediction_labels),
+      "f1_weighted": 100 * sklearn.metrics.f1_score(
+          target_labels,
+          prediction_labels,
+          average="weighted",
+          labels=circa_labels
+      )
+  }
 
 def extractive_explanations_metric(targets, predictions):
   """Compute label accuracy and macro F1 score for explanations."""

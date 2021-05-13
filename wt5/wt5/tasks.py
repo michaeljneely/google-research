@@ -299,10 +299,11 @@ for mnli_eval_set in ("matched", "mismatched"):
 # pylint: enable=protected-access
 
 # ======================== Circa ===============================
+
 TaskRegistry.add(
-    "circa_nli_relaxed_eval_v100",
+    "circa_v100_nli_relaxed_matched_13",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["train"]),
+        tfds_name="circa:1.0.0", splits=["train-matched-13"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -313,64 +314,102 @@ TaskRegistry.add(
         seqio.CacheDatasetPlaceholder(),
         seqio.preprocessors.append_eos_after_trim,
     ],
-    metric_fns=[t5_metrics.accuracy],
+    metric_fns=[metrics.circa_nli_metrics],
     output_features=DEFAULT_OUTPUT_FEATURES,
     postprocess_fn=postprocessors.abstractive_explanations,
 )
 
 TaskRegistry.add(
-    "circa_nli_relaxed_expln_eval_v100",
+    "circa_eval_v100_nli_relaxed_matched_13",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["train"]),
+        tfds_name="circa:1.0.0", splits=["val-matched-13"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
             prefix=preprocessors.CircaPrefixes.nli,
             aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
-            explain=True),
-        seqio.preprocessors.tokenize,
-        seqio.CacheDatasetPlaceholder(),
-        seqio.preprocessors.append_eos_after_trim,
-    ],
-    metric_fns=[t5_metrics.accuracy],
-    output_features=DEFAULT_OUTPUT_FEATURES,
-    postprocess_fn=postprocessors.abstractive_explanations,
-)
-
-TaskRegistry.add(
-    "circa_nli_strict_eval_v100",
-    source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["train"]),
-    preprocessors=[
-        functools.partial(
-            preprocessors.circa,
-            prefix=preprocessors.CircaPrefixes.nli,
-            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
             explain=False),
         seqio.preprocessors.tokenize,
         seqio.CacheDatasetPlaceholder(),
         seqio.preprocessors.append_eos_after_trim,
     ],
-    metric_fns=[t5_metrics.accuracy],
+    metric_fns=[metrics.circa_nli_metrics],
     output_features=DEFAULT_OUTPUT_FEATURES,
     postprocess_fn=postprocessors.abstractive_explanations,
 )
 
 TaskRegistry.add(
-    "circa_nli_strict_expln_eval_v100",
+    "circa_v100_nli_relaxed_matched_948",
     source=seqio.TfdsDataSource(
-        tfds_name="circa:1.0.0", splits=["train"]),
+        tfds_name="circa:1.0.0", splits=["train-matched-948"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
             prefix=preprocessors.CircaPrefixes.nli,
-            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
-            explain=True),
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            explain=False),
         seqio.preprocessors.tokenize,
         seqio.CacheDatasetPlaceholder(),
         seqio.preprocessors.append_eos_after_trim,
     ],
-    metric_fns=[t5_metrics.accuracy],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+TaskRegistry.add(
+    "circa_eval_v100_nli_relaxed_matched_948",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["val-matched-948"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            explain=False),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+TaskRegistry.add(
+    "circa_v100_nli_relaxed_matched_2756",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["train-matched-2756"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            explain=False),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+TaskRegistry.add(
+    "circa_eval_v100_nli_relaxed_matched_2756",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa:1.0.0", splits=["val-matched-2756"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa,
+            prefix=preprocessors.CircaPrefixes.nli,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            explain=False),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
     output_features=DEFAULT_OUTPUT_FEATURES,
     postprocess_fn=postprocessors.abstractive_explanations,
 )
