@@ -323,7 +323,7 @@ TaskRegistry.add(
 TaskRegistry.add(
     "circa_eval_v100_nli_relaxed_matched13",
     source=seqio.TfdsDataSource(
-        tfds_name="circa_matched13:1.0.0", splits=["val"]),
+        tfds_name="circa_matched13:1.0.0", splits=["validation"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -361,7 +361,7 @@ TaskRegistry.add(
 TaskRegistry.add(
     "circa_eval_v100_nli_relaxed_matched948",
     source=seqio.TfdsDataSource(
-        tfds_name="circa_matched948:1.0.0", splits=["val"]),
+        tfds_name="circa_matched948:1.0.0", splits=["validation"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -399,7 +399,7 @@ TaskRegistry.add(
 TaskRegistry.add(
     "circa_eval_v100_nli_relaxed_matched2756",
     source=seqio.TfdsDataSource(
-        tfds_name="circa_matched2756:1.0.0", splits=["val"]),
+        tfds_name="circa_matched2756:1.0.0", splits=["validation"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -438,7 +438,7 @@ TaskRegistry.add(
 TaskRegistry.add(
     "circa_eval_v100_nli_strict_matched13",
     source=seqio.TfdsDataSource(
-        tfds_name="circa_matched13:1.0.0", splits=["val"]),
+        tfds_name="circa_matched13:1.0.0", splits=["validation"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -476,7 +476,7 @@ TaskRegistry.add(
 TaskRegistry.add(
     "circa_eval_v100_nli_strict_matched948",
     source=seqio.TfdsDataSource(
-        tfds_name="circa_matched948:1.0.0", splits=["val"]),
+        tfds_name="circa_matched948:1.0.0", splits=["validation"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
@@ -514,7 +514,7 @@ TaskRegistry.add(
 TaskRegistry.add(
     "circa_eval_v100_nli_strict_matched2756",
     source=seqio.TfdsDataSource(
-        tfds_name="circa_matched2756:1.0.0", splits=["val"]),
+        tfds_name="circa_matched2756:1.0.0", splits=["validation"]),
     preprocessors=[
         functools.partial(
             preprocessors.circa,
