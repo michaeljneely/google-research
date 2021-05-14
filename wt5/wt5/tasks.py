@@ -438,7 +438,7 @@ TaskRegistry.add(
         functools.partial(
             preprocessors.circa,
             prefix=preprocessors.CircaPrefixes.nli,
-            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
             explain=False),
         seqio.preprocessors.tokenize,
         seqio.CacheDatasetPlaceholder(),
@@ -457,7 +457,7 @@ TaskRegistry.add(
         functools.partial(
             preprocessors.circa,
             prefix=preprocessors.CircaPrefixes.nli,
-            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
             explain=True),
         seqio.preprocessors.tokenize,
         seqio.CacheDatasetPlaceholder(),
@@ -475,7 +475,7 @@ TaskRegistry.add(
         functools.partial(
             preprocessors.circa,
             prefix=preprocessors.CircaPrefixes.nli,
-            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
             explain=False),
         seqio.preprocessors.tokenize,
         seqio.CacheDatasetPlaceholder(),
@@ -494,7 +494,7 @@ TaskRegistry.add(
         functools.partial(
             preprocessors.circa,
             prefix=preprocessors.CircaPrefixes.nli,
-            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
             explain=True),
         seqio.preprocessors.tokenize,
         seqio.CacheDatasetPlaceholder(),
@@ -512,7 +512,7 @@ TaskRegistry.add(
         functools.partial(
             preprocessors.circa,
             prefix=preprocessors.CircaPrefixes.nli,
-            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
             explain=False),
         seqio.preprocessors.tokenize,
         seqio.CacheDatasetPlaceholder(),
@@ -531,7 +531,7 @@ TaskRegistry.add(
         functools.partial(
             preprocessors.circa,
             prefix=preprocessors.CircaPrefixes.nli,
-            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
             explain=True),
         seqio.preprocessors.tokenize,
         seqio.CacheDatasetPlaceholder(),
