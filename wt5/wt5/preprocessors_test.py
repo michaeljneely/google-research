@@ -197,10 +197,14 @@ class PreprocessorsTest(absltest.TestCase):
         }
     )
 
-  def test_circa_nli_relaxed(self):
+# ===== Circa Tests =====
+
+# NLI Relaxed
+  def test_circa_nli_relaxed_no_context(self):
     input_data = {
         'question_x': 'Question?',
         'canquestion_x': 'Question.',
+        'context': 'Context.',
         'answer_y': 'Answer.',
         'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
         'goldstandard2': 3 # 'In the middle, neither yes nor no'
@@ -210,6 +214,7 @@ class PreprocessorsTest(absltest.TestCase):
         og_dataset,
         prefix=preprocessors.CircaPrefixes.nli,
         aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        add_context=False,
         explain=False
     )
     t5.data.assert_dataset(
@@ -220,33 +225,36 @@ class PreprocessorsTest(absltest.TestCase):
         }
     )
 
-  def test_circa_nli_strict(self):
+  def test_circa_nli_relaxed_context(self):
     input_data = {
         'question_x': 'Question?',
         'canquestion_x': 'Question.',
+        'context': 'Context.',
         'answer_y': 'Answer.',
-        'goldstandard1': 6, # 'I am not sure how X will interpret Y\'s answer'
+        'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
         'goldstandard2': 3 # 'In the middle, neither yes nor no'
     }
     og_dataset = tf.data.Dataset.from_tensors(input_data)
     dataset = preprocessors.circa(
         og_dataset,
         prefix=preprocessors.CircaPrefixes.nli,
-        aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        add_context=True,
         explain=False
     )
     t5.data.assert_dataset(
         dataset,
         {
-            'inputs': 'nli hypothesis: Question. premise: Answer.',
-            'targets': 'none'
+            'inputs': 'nli context: Context. hypothesis: Question. premise: Answer.',
+            'targets': 'neutral'
         }
     )
 
-  def test_circa_nli_explain_relaxed(self):
+  def test_circa_nli_explain_relaxed_no_context(self):
     input_data = {
         'question_x': 'Question?',
         'canquestion_x': 'Question.',
+        'context': 'Context.',
         'answer_y': 'Answer.',
         'goldstandard1': 1, # 'Probably yes / sometimes yes',
         'goldstandard2': 0 # 'Yes'
@@ -256,6 +264,7 @@ class PreprocessorsTest(absltest.TestCase):
         og_dataset,
         prefix=preprocessors.CircaPrefixes.nli,
         aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        add_context=False,
         explain=True
     )
     t5.data.assert_dataset(
@@ -266,10 +275,87 @@ class PreprocessorsTest(absltest.TestCase):
         }
     )
 
-  def test_circa_nli_explain_strict(self):
+  def test_circa_nli_explain_relaxed_context(self):
     input_data = {
         'question_x': 'Question?',
         'canquestion_x': 'Question.',
+        'context': 'Context.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 1, # 'Probably yes / sometimes yes',
+        'goldstandard2': 0 # 'Yes'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.nli,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        add_context=True,
+        explain=True
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': 'explain nli context: Context. hypothesis: Question. premise: Answer.',
+            'targets': 'entailment'
+        }
+    )
+
+# NLI Strict
+  def test_circa_nli_strict_no_context(self):
+    input_data = {
+        'question_x': 'Question?',
+        'canquestion_x': 'Question.',
+        'context': 'Context.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 6, # 'I am not sure how X will interpret Y\'s answer'
+        'goldstandard2': 3 # 'In the middle, neither yes nor no'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.nli,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        add_context=False,
+        explain=False
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': 'nli hypothesis: Question. premise: Answer.',
+            'targets': 'none'
+        }
+    )
+
+  def test_circa_nli_strict_context(self):
+    input_data = {
+        'question_x': 'Question?',
+        'canquestion_x': 'Question.',
+        'context': 'Context.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 6, # 'I am not sure how X will interpret Y\'s answer'
+        'goldstandard2': 3 # 'In the middle, neither yes nor no'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.nli,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        add_context=True,
+        explain=False
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': 'nli context: Context. hypothesis: Question. premise: Answer.',
+            'targets': 'none'
+        }
+    )
+
+  def test_circa_nli_explain_strict_no_context(self):
+    input_data = {
+        'question_x': 'Question?',
+        'canquestion_x': 'Question.',
+        'context': 'Context.',
         'answer_y': 'Answer.',
         'goldstandard1': 1, # 'Probably yes / sometimes yes'
         'goldstandard2': 0 #'Yes'
@@ -279,6 +365,7 @@ class PreprocessorsTest(absltest.TestCase):
         og_dataset,
         prefix=preprocessors.CircaPrefixes.nli,
         aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        add_context=False,
         explain=True
     )
     t5.data.assert_dataset(
@@ -289,9 +376,36 @@ class PreprocessorsTest(absltest.TestCase):
         }
     )
 
-  def test_circa_qa_relaxed(self):
+  def test_circa_nli_explain_strict_context(self):
     input_data = {
         'question_x': 'Question?',
+        'canquestion_x': 'Question.',
+        'context': 'Context.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 1, # 'Probably yes / sometimes yes'
+        'goldstandard2': 0 #'Yes'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.nli,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        add_context=True,
+        explain=True
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': 'explain nli context: Context. hypothesis: Question. premise: Answer.',
+            'targets': 'none'
+        }
+    )
+
+# QA Relaxed
+  def test_circa_qa_relaxed_no_context(self):
+    input_data = {
+        'question_x': 'Question?',
+        'context': 'Context.',
         'answer_y': 'Answer.',
         'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
         'goldstandard2': 3 # 'In the middle, neither yes nor no'
@@ -301,6 +415,7 @@ class PreprocessorsTest(absltest.TestCase):
         og_dataset,
         prefix=preprocessors.CircaPrefixes.qa,
         aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        add_context=False,
         explain=False
     )
     t5.data.assert_dataset(
@@ -311,9 +426,34 @@ class PreprocessorsTest(absltest.TestCase):
         }
     )
 
-  def test_circa_qa_strict(self):
+  def test_circa_qa_relaxed_context(self):
     input_data = {
         'question_x': 'Question?',
+        'context': 'Context.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
+        'goldstandard2': 3 # 'In the middle, neither yes nor no'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.qa,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        add_context=True,
+        explain=False
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': f'circa context: Context. question: Question? answer: Answer. {CIRCA_RELAXED_CHOICES}',
+            'targets': 'In the middle, neither yes nor no'
+        }
+    )
+
+  def test_circa_qa_strict_no_context(self):
+    input_data = {
+        'question_x': 'Question?',
+        'context': 'Context.',
         'answer_y': 'Answer.',
         'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
         'goldstandard2': 3 # 'In the middle, neither yes nor no'
@@ -323,6 +463,7 @@ class PreprocessorsTest(absltest.TestCase):
         og_dataset,
         prefix=preprocessors.CircaPrefixes.qa,
         aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        add_context=False,
         explain=False
     )
     t5.data.assert_dataset(
@@ -333,9 +474,35 @@ class PreprocessorsTest(absltest.TestCase):
         }
     )
 
-  def test_circa_qa_explain_relaxed(self):
+  def test_circa_qa_strict_context(self):
     input_data = {
         'question_x': 'Question?',
+        'context': 'Context.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
+        'goldstandard2': 3 # 'In the middle, neither yes nor no'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.qa,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        add_context=True,
+        explain=False
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': f'circa context: Context. question: Question? answer: Answer. {CIRCA_STRICT_CHOICES}',
+            'targets': 'I am not sure how X will interpret Y\'s answer'
+        }
+    )
+
+
+  def test_circa_qa_explain_relaxed_no_context(self):
+    input_data = {
+        'question_x': 'Question?',
+        'context': 'Context.',
         'answer_y': 'Answer.',
         'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
         'goldstandard2': 3 # 'In the middle, neither yes nor no'
@@ -345,6 +512,7 @@ class PreprocessorsTest(absltest.TestCase):
         og_dataset,
         prefix=preprocessors.CircaPrefixes.qa,
         aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        add_context=False,
         explain=True
     )
     t5.data.assert_dataset(
@@ -355,9 +523,34 @@ class PreprocessorsTest(absltest.TestCase):
         }
     )
 
-  def test_circa_qa_explain_strict(self):
+  def test_circa_qa_explain_relaxed_no_context(self):
     input_data = {
         'question_x': 'Question?',
+        'context': 'Context.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
+        'goldstandard2': 3 # 'In the middle, neither yes nor no'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.qa,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        add_context=True,
+        explain=True
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': f'explain circa context: Context. question: Question? answer: Answer. {CIRCA_RELAXED_CHOICES}',
+            'targets': 'In the middle, neither yes nor no'
+        }
+    )
+
+  def test_circa_qa_explain_strict_no_context(self):
+    input_data = {
+        'question_x': 'Question?',
+        'context': 'Context.',
         'answer_y': 'Answer.',
         'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
         'goldstandard2': 3 # 'In the middle, neither yes nor no'
@@ -367,6 +560,7 @@ class PreprocessorsTest(absltest.TestCase):
         og_dataset,
         prefix=preprocessors.CircaPrefixes.qa,
         aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        add_context=False,
         explain=True
     )
     t5.data.assert_dataset(
@@ -377,6 +571,29 @@ class PreprocessorsTest(absltest.TestCase):
         }
     )
 
+  def test_circa_qa_explain_strict_context(self):
+    input_data = {
+        'question_x': 'Question?',
+        'context': 'Context.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 6, #'I am not sure how X will interpret Y\'s answer'
+        'goldstandard2': 3 # 'In the middle, neither yes nor no'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa(
+        og_dataset,
+        prefix=preprocessors.CircaPrefixes.qa,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        add_context=True,
+        explain=True
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': f'explain circa context: Context. question: Question? answer: Answer. {CIRCA_STRICT_CHOICES}',
+            'targets': 'I am not sure how X will interpret Y\'s answer'
+        }
+    )
 
   def test_rationales_preprocessor(self):
     input_data = {
