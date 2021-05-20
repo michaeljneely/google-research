@@ -110,7 +110,9 @@ def circa_nli_metrics(targets, predictions):
 
   circa_labels = ["entailment", "neutral", "contradiction"]
 
-  #TODO: add some metric on the explanations
+  #TODO: add more metrics on the explanations
+  def get_explanation_length(explanations):
+    return len(explanations) if isinstance(explanations, str) else len(explanations[0])
 
   return {
       "accuracy": 100 * sklearn.metrics.accuracy_score(
@@ -121,7 +123,8 @@ def circa_nli_metrics(targets, predictions):
           prediction_labels,
           average="weighted",
           labels=circa_labels
-      )
+      ),
+      "explanation_length": get_explanation_length(prediction_explanations)
   }
 
 def circa_qa_metrics(targets, predictions):
@@ -153,6 +156,9 @@ def circa_qa_metrics(targets, predictions):
   target_labels, target_explanations = get_labels_and_explanations(targets)
   prediction_labels, prediction_explanations = get_labels_and_explanations(predictions)
 
+  def get_explanation_length(explanations):
+    return len(explanations) if isinstance(explanations, str) else len(explanations[0])
+
   return {
       "accuracy": 100 * sklearn.metrics.accuracy_score(
           target_labels,
@@ -161,7 +167,8 @@ def circa_qa_metrics(targets, predictions):
           target_labels,
           prediction_labels,
           average="weighted"
-      )
+      ),
+      "explanation_length": get_explanation_length(prediction_explanations)
   }
 
 def extractive_explanations_metric(targets, predictions):

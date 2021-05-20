@@ -359,17 +359,17 @@ def circa(
           full_prefix,
           'context:',
           x['context'],
-          'question:',
-          x['question_x'],
-          'answer:',
+          'premise:',
+          x['canquestion_x'],
+          'hypothesis',
           x['answer_y'],
           choices_text], separator=' ')
       else:
         inputs = tf.strings.join([
           full_prefix,
-          'question:',
-          x['question_x'],
-          'answer:',
+          'premise:',
+          x['canquestion_x'],
+          'hypothesis',
           x['answer_y'],
           choices_text], separator=' ')
     else:
