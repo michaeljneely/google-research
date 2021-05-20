@@ -361,7 +361,7 @@ def circa(
           x['context'],
           'premise:',
           x['canquestion_x'],
-          'hypothesis',
+          'hypothesis:',
           x['answer_y'],
           choices_text], separator=' ')
       else:
@@ -369,7 +369,7 @@ def circa(
           full_prefix,
           'premise:',
           x['canquestion_x'],
-          'hypothesis',
+          'hypothesis:',
           x['answer_y'],
           choices_text], separator=' ')
     else:
