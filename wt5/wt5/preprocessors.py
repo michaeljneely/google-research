@@ -86,6 +86,7 @@ def esnli(
     prefix='explain nli',
     drop_explanations=False,
     add_choices=False,
+    circa_choices=False,
 ):
   """Convert the e-SNLI dataset to a text-to-text dataset.
 
@@ -155,9 +156,15 @@ def esnli(
         [prefix, 'hypothesis:', x['hypothesis'], 'premise:', x['premise']],
         separator=' ')
     if add_choices:
-      inputs = tf.strings.join([
-          inputs, 'choice: entailment choice: neutral choice: contradiction'],
-                               separator=' ')
+
+      if circa_choices:
+        inputs = tf.strings.join([
+            inputs, 'choice: Yes choice: No choice: In the middle, neither yes nor no'],
+                                separator=' ')
+      else:
+        inputs = tf.strings.join([
+            inputs, 'choice: entailment choice: neutral choice: contradiction'],
+                                separator=' ')
 
     class_label = tf.gather(labels, x['label'])
 

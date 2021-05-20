@@ -321,6 +321,19 @@ MixtureRegistry.add(
     default_rate=_rate_num_input_examples,
 )
 
+## TEMP TEST ##
+MixtureRegistry.add(
+    "esnli_and_cos_e_to_circa_temptest_qa_strict_unmatched2756",
+    [("esnli_qa_v010_with_choices", ESNLI_SIZE),
+     ("esnli_qa_v010_0_expln_with_choices", ESNLI_SIZE),
+     ("cos_e_v001", COS_E_SIZE),
+     ("cos_e_v001_0_expln", COS_E_SIZE),
+     ("circa_v100_0_expln_qa_strict_unmatched2756", CIRCA_TRAIN_SIZE),
+     ("circa_eval_v100_qa_strict_unmatched2756", CIRCA_VAL_SIZE)],
+    default_rate=_rate_num_input_examples,
+)
+####
+
 # ----------------------------- Amazon Reviews ---------------------------------
 amazon_reviews_train_tasks = []
 amazon_reviews_eval_tasks = []
