@@ -112,7 +112,7 @@ def circa_nli_metrics(targets, predictions):
 
   #TODO: add more metrics on the explanations
   def get_average_explanation_length(explanations):
-      sum(map(len, explanations)) / len(explanations)
+    return sum(map(len, explanations)) / len(explanations)
 
   return {
       "accuracy": 100 * sklearn.metrics.accuracy_score(
@@ -121,10 +121,9 @@ def circa_nli_metrics(targets, predictions):
       "f1_weighted": 100 * sklearn.metrics.f1_score(
           target_labels,
           prediction_labels,
-          average="weighted",
-          labels=circa_labels
+          average="weighted"
       ),
-      "explanation_length": get_average_explanation_length(prediction_explanations)
+      "avg_explanation_length": get_average_explanation_length(prediction_explanations)
   }
 
 def circa_qa_metrics(targets, predictions):
@@ -157,7 +156,7 @@ def circa_qa_metrics(targets, predictions):
   prediction_labels, prediction_explanations = get_labels_and_explanations(predictions)
 
   def get_average_explanation_length(explanations):
-      sum(map(len, explanations)) / len(explanations)
+    return sum(map(len, explanations)) / len(explanations)
 
   return {
       "accuracy": 100 * sklearn.metrics.accuracy_score(
