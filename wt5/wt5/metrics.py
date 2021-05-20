@@ -99,7 +99,7 @@ def circa_nli_metrics(targets, predictions):
         if key == "label":
           labels.append(value)
         elif key == "explanations":
-          explanations.append("" if not value else value)
+          explanations.append("" if not value else value[0])
         else:
           raise RuntimeError(
               "Unexpected key:%s provided. to metric fn." % (key))
@@ -111,8 +111,8 @@ def circa_nli_metrics(targets, predictions):
   circa_labels = ["entailment", "neutral", "contradiction"]
 
   #TODO: add more metrics on the explanations
-  def get_explanation_length(explanations):
-    return len(explanations) if isinstance(explanations, str) else len(explanations[0])
+  def get_average_explanation_length(explanations):
+      sum(map(len, explanations)) / len(explanations)
 
   return {
       "accuracy": 100 * sklearn.metrics.accuracy_score(
@@ -124,7 +124,7 @@ def circa_nli_metrics(targets, predictions):
           average="weighted",
           labels=circa_labels
       ),
-      "explanation_length": get_explanation_length(prediction_explanations)
+      "explanation_length": get_average_explanation_length(prediction_explanations)
   }
 
 def circa_qa_metrics(targets, predictions):
@@ -147,7 +147,7 @@ def circa_qa_metrics(targets, predictions):
         if key == "label":
           labels.append(value)
         elif key == "explanations":
-          explanations.append("" if not value else value)
+          explanations.append("" if not value else value[0])
         else:
           raise RuntimeError(
               "Unexpected key:%s provided. to metric fn." % (key))
@@ -156,8 +156,8 @@ def circa_qa_metrics(targets, predictions):
   target_labels, target_explanations = get_labels_and_explanations(targets)
   prediction_labels, prediction_explanations = get_labels_and_explanations(predictions)
 
-  def get_explanation_length(explanations):
-    return len(explanations) if isinstance(explanations, str) else len(explanations[0])
+  def get_average_explanation_length(explanations):
+      sum(map(len, explanations)) / len(explanations)
 
   return {
       "accuracy": 100 * sklearn.metrics.accuracy_score(
@@ -168,7 +168,7 @@ def circa_qa_metrics(targets, predictions):
           prediction_labels,
           average="weighted"
       ),
-      "explanation_length": get_explanation_length(prediction_explanations)
+      "avg_explanation_length": get_average_explanation_length(prediction_explanations)
   }
 
 def extractive_explanations_metric(targets, predictions):
