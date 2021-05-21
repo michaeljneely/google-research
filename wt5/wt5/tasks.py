@@ -200,48 +200,6 @@ TaskRegistry.add(
     output_features=DEFAULT_OUTPUT_FEATURES,
     metric_fns=[metrics.esnli_metric])
 
-
-## TEMP TEST ##
-TaskRegistry.add(
-    "esnli_qa_v010_with_choices",
-    source=seqio.TfdsDataSource(tfds_name="esnli:0.1.0"),
-    preprocessors=[
-        functools.partial(
-            preprocessors.esnli,
-            add_choices=True,
-            circa_choices=True
-        ),
-        seqio.preprocessors.tokenize,
-        seqio.CacheDatasetPlaceholder(),
-        seqio.preprocessors.append_eos_after_trim,
-    ],
-    postprocess_fn=postprocessors.abstractive_explanations,
-    output_features=DEFAULT_OUTPUT_FEATURES,
-    metric_fns=[metrics.esnli_metric])
-
-# e-SNLI with no explanations.
-TaskRegistry.add(
-    "esnli_qa_v010_0_expln_with_choices",
-    source=seqio.TfdsDataSource(tfds_name="esnli:0.1.0"),
-    preprocessors=[
-        functools.partial(
-            preprocessors.esnli,
-            prefix="nli",
-            drop_explanations=True,
-            add_choices=True,
-            circa_choices=True
-        ),
-        seqio.preprocessors.tokenize,
-        seqio.CacheDatasetPlaceholder(),
-        seqio.preprocessors.append_eos_after_trim,
-    ],
-    postprocess_fn=postprocessors.abstractive_explanations,
-    output_features=DEFAULT_OUTPUT_FEATURES,
-    metric_fns=[metrics.esnli_metric])
-
-
-####
-
 # ======================== e-SNLI Corpus Task ==================================
 TaskRegistry.add(
     "esnli_v010",
