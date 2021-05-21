@@ -64,7 +64,7 @@ TaskRegistry.add(
     ],
     postprocess_fn=postprocessors.abstractive_explanations,
     output_features=DEFAULT_OUTPUT_FEATURES,
-    metric_fns=[metrics.circa_qa_metrics])
+    metric_fns=[metrics.esnli_metric])
 
 # CoS-E with no explanations, and modified prefixes like e-SNLI.
 TaskRegistry.add(
