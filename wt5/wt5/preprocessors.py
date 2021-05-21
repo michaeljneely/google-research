@@ -168,6 +168,9 @@ def esnli(
 
     class_label = tf.gather(labels, x['label'])
 
+    if circa_choices:
+      class_label = tf.gather()
+
     if drop_explanations:
       targets = class_label
     else:
@@ -185,7 +188,6 @@ def esnli(
 
 class CircaPrefixes(Enum):
   nli = 'nli'
-  qa = 'circa'
 
 class CircaAggregationSchemes(Enum):
   strict = 'strict'
@@ -197,7 +199,7 @@ def circa(
     aggregation_scheme: CircaAggregationSchemes = CircaAggregationSchemes.strict,
     add_context: bool = False,
     explain: bool = False
-    ):
+  ):
   """Convert the Circa dataset to a text-to-text dataset.
 
   The Circa dataset contains instances of the following format:
@@ -232,31 +234,19 @@ def circa(
     NA
     Other
 
-  We can turn this into a variety of formats, both of which can optionally request explanations.
-  There are no references with which to evaluate the quality of predicted explanations.
+  We can turn this into a variety of formats. However, since the majority of the available
+  explanations to learn from are in the 'E-SNLI' dataset, we pose instances as an 
+  Natural Language Inference task.
+  
+  Here entailment is mapped to "Yes", contradiction to "No", and neutral to 
+  "In the middle, neither yes nor no". Thus, the model has a hard cap on performance in 
+  either the  strict or relaxed setting.
 
-  1) Natural Language Inference. Here entailment is mapped to "yes", contradiction to "no", and 
-    neutral to "in the middle". Thus, the model has a hard cap on performance in either the 
-    strict or relaxed setting.
     {
         'inputs': 'explain nli premise: I see myself raising a family in New York.
                    hypothesis: I will never have a family.'
         'targets': 'contradiction',
         'prediction': 'contradiction explanation: Abstractive explanation'
-    }
-
-  2) Question Answering
-    {
-        'inputs': 'explain circa question: Do you see yourself raising a family in New York?
-                   answer: I will never have a family. 
-                   choice: Yes
-                   choice: Yes, subject to some conditions
-                   choice: No
-                   choice: In the middle, neither yes nor no
-                   choice: NA
-                   choice: Other
-        'targets': No
-        'prediction': No. explanation: Abstractive explanation'
     }
 
   We can also (optionally) include the context in the model input. For example:
@@ -271,7 +261,7 @@ def circa(
 
   Args:
     dataset: a tf.data.Dataset to process.
-    prefix: CircaPrefixes, one of the supported Circa prefixes
+    prefix: CircaPrefixes, one of the supported Circa prefixes (currently only NLI)
     aggregation_scheme: CircaAggregationSchemes, relaxed or strict evaluation
     add_context: Optional[bool], whether to include the context with a special 'context' prefix. Defaults to False.
     explain: Optional[bool], whether to prompt the model to provide an explanation for its decision. Defaults to False.
@@ -304,26 +294,6 @@ def circa(
     'none'
   ]
 
-  circa_qa_choices_strict = [
-    "Yes",
-    "Probably yes / sometimes yes",
-    "Yes, subject to some conditions",
-    "No",
-    "Probably no",
-    "In the middle, neither yes nor no",
-    "I am not sure how X will interpret Y's answer",
-    "NA",
-    "Other"
-  ]
-
-  circa_qa_choices_relaxed = [
-    "Yes",
-    "Yes, subject to some conditions",
-    "No",
-    "In the middle, neither yes nor no",
-    "NA",
-    "Other"
-  ]
 
   def my_fn(x):
 
@@ -349,36 +319,6 @@ def circa(
         class_label = tf.gather(circa_nli_labels_strict, x['goldstandard1'])
       else:
         class_label = tf.gather(circa_nli_labels_relaxed, x['goldstandard2'])
-
-    # QA Variant
-    elif prefix == CircaPrefixes.qa:
-      if aggregation_scheme == CircaAggregationSchemes.strict:
-        choices_text = tf.convert_to_tensor(circa_qa_choices_strict)
-        choices_text = tf.strings.reduce_join('choice: ' + choices_text, separator=' ')
-        class_label = tf.gather(circa_qa_choices_strict, x['goldstandard1'])
-      else:
-        choices_text = tf.convert_to_tensor(circa_qa_choices_relaxed)
-        choices_text = tf.strings.reduce_join('choice: ' + choices_text, separator=' ')
-        class_label = tf.gather(circa_qa_choices_relaxed, x['goldstandard2'])
-
-      if add_context:
-        inputs = tf.strings.join([
-          full_prefix,
-          'context:',
-          x['context'],
-          'premise:',
-          x['canquestion_x'],
-          'hypothesis:',
-          x['answer_y'],
-          choices_text], separator=' ')
-      else:
-        inputs = tf.strings.join([
-          full_prefix,
-          'premise:',
-          x['canquestion_x'],
-          'hypothesis:',
-          x['answer_y'],
-          choices_text], separator=' ')
     else:
       raise TypeError("Scheme not available")
 

@@ -76,27 +76,6 @@ class MetricsTest(test_utils.BaseMetricsTest):
         {"accuracy": 100., "bleu": 100., "expln1_length": 16}
     )
 
-  def test_circa_qa_metrics(self):
-    ref = "this is a string"
-    ref2 = "this is another string"
-    self.assertDictClose(
-        metrics.circa_qa_metrics(
-            [
-                {"label": 0, "explanations": [ref]},
-                {"label": 0, "explanations": [ref]},
-                {"label": 0, "explanations": [ref2]},
-                {"label": 0, "explanations": [ref2]},
-            ],
-            [
-                {"label": 0, "explanations": [ref]},
-                {"label": 0, "explanations": [""]},
-                {"label": 0, "explanations": [ref2]},
-                {"label": 0, "explanations": [ref2]},
-            ]
-        ),
-        {"accuracy": 100., "f1_weighted": 100., "avg_explanation_length": 15.}
-    )
-
   def test_circa_nli_metrics(self):
     ref = "this is a string"
     ref2 = "this is another string"

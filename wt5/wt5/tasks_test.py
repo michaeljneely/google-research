@@ -44,7 +44,7 @@ _TASKS = [
     'cos_e_explanations_take100_v001',
     'cos_e_labels_skip100_v001',
     'circa_v100_0_expln_nli_relaxed_matched13',
-    'circa_v100_qa_strict_matched2756',
+    'circa_v100_nli_relaxed_unmatched13',
     'movie_rationales_v010',
     'movie_rationales_v010_no_expl',
     'imdb_reviews_v100',
@@ -59,6 +59,8 @@ _MIXTURES = [
     'esnli_cos_e_transfer',
     'movie_rationales_100_explanations',
     'amazon_books_movies_equal',
+    'esnli_and_cos_e_to_circa_nli_relaxed_matched13',
+    'esnli_and_cos_e_to_circa_nli_strict_unmatched2756'
 ]
 
 

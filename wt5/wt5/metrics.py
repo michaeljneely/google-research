@@ -126,50 +126,6 @@ def circa_nli_metrics(targets, predictions):
       "avg_explanation_length": get_average_explanation_length(prediction_explanations)
   }
 
-def circa_qa_metrics(targets, predictions):
-  """Compute label accuracy and weighed F1 for Circa qa predictions.
-
-  TODO: add more metrics
-
-  Args:
-    targets: list of dict of label and explanation
-    predictions: list of dict of label and explanation
-  Returns:
-    a dict with accuracy and weighted F1 scores (and eventually more metrics)
-  """
-  def get_labels_and_explanations(answers):
-    """Helper function to get lists of labels and explanations from a dict."""
-    labels = []
-    explanations = []
-    for answer in answers:
-      for key, value in answer.items():
-        if key == "label":
-          labels.append(value)
-        elif key == "explanations":
-          explanations.append("" if not value else value[0])
-        else:
-          raise RuntimeError(
-              "Unexpected key:%s provided. to metric fn." % (key))
-    return labels, explanations
-
-  target_labels, target_explanations = get_labels_and_explanations(targets)
-  prediction_labels, prediction_explanations = get_labels_and_explanations(predictions)
-
-  def get_average_explanation_length(explanations):
-    return sum(map(len, explanations)) / len(explanations)
-
-  return {
-      "accuracy": 100 * sklearn.metrics.accuracy_score(
-          target_labels,
-          prediction_labels),
-      "f1_weighted": 100 * sklearn.metrics.f1_score(
-          target_labels,
-          prediction_labels,
-          average="weighted"
-      ),
-      "avg_explanation_length": get_average_explanation_length(prediction_explanations)
-  }
-
 def extractive_explanations_metric(targets, predictions):
   """Compute label accuracy and macro F1 score for explanations."""
 
