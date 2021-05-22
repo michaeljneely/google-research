@@ -790,6 +790,91 @@ TaskRegistry.add(
     postprocess_fn=postprocessors.abstractive_explanations,
 )
 
+# ===== Circa Baselines =====
+
+# NLI - Hypothesis Only - Relaxed - Matched
+TaskRegistry.add(
+    "circa_nli_baseline_hypothesis_only_relaxed_matched13",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa_matched13:1.0.0", splits=["train", "validation", "test"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa_nli_baseline,
+            baseline_schema=preprocessors.preprocessors.CircaNLIBaselines.hypothesis_only,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            add_context=False
+        ),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+# NLI - Hypothesis Only - Relaxed - UnMatched
+TaskRegistry.add(
+    "circa_nli_baseline_hypothesis_only_relaxed_unmatched13",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa_unmatched13:1.0.0", splits=["train", "validation", "test"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa_nli_baseline,
+            baseline_schema=preprocessors.preprocessors.CircaNLIBaselines.hypothesis_only,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            add_context=True
+        ),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+# NLI - Premise Only - Relaxed - Matched
+TaskRegistry.add(
+    "circa_nli_baseline_premise_only_relaxed_matched13",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa_matched13:1.0.0", splits=["train", "validation", "test"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa_nli_baseline,
+            baseline_schema=preprocessors.preprocessors.CircaNLIBaselines.premise_only,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            add_context=False
+        ),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
+
+# NLI - Premise Only - Relaxed - UnMatched
+TaskRegistry.add(
+    "circa_nli_baseline_premise_only_relaxed_unmatched13",
+    source=seqio.TfdsDataSource(
+        tfds_name="circa_unmatched13:1.0.0", splits=["train", "validation", "test"]),
+    preprocessors=[
+        functools.partial(
+            preprocessors.circa_nli_baseline,
+            baseline_schema=preprocessors.preprocessors.CircaNLIBaselines.premise_only,
+            aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+            add_context=True
+        ),
+        seqio.preprocessors.tokenize,
+        seqio.CacheDatasetPlaceholder(),
+        seqio.preprocessors.append_eos_after_trim,
+    ],
+    metric_fns=[metrics.circa_nli_metrics],
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    postprocess_fn=postprocessors.abstractive_explanations,
+)
 
 # ======================== Movie Rationales ======================
 TaskRegistry.add(

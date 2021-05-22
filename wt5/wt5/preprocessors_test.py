@@ -401,6 +401,102 @@ class PreprocessorsTest(absltest.TestCase):
         }
     )
 
+  def test_circa_nli_baseline_hypothesis_relaxed_no_context(self):
+    input_data = {
+        'question_x': 'Question?',
+        'canquestion_x': 'Question.',
+        'context': 'Context.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 1, # 'Probably yes / sometimes yes'
+        'goldstandard2': 0 #'Yes'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa_nli_baseline(
+        og_dataset,
+        baseline_scheme=preprocessors.CircaNLIBaselines.hypothesis_only,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        add_context=False
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': 'nli hypothesis: Question. premise: .',
+            'targets': 'entailment'
+        }
+    )
+
+  def test_circa_nli_baseline_hypothesis_strict_context(self):
+    input_data = {
+        'question_x': 'Question?',
+        'canquestion_x': 'Question.',
+        'context': 'Context.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 1, # 'Probably yes / sometimes yes'
+        'goldstandard2': 0 #'Yes'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa_nli_baseline(
+        og_dataset,
+        baseline_scheme=preprocessors.CircaNLIBaselines.hypothesis_only,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        add_context=True
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': 'nli context: Context. hypothesis: Question. premise: .',
+            'targets': 'none'
+        }
+    )
+
+  def test_circa_nli_baseline_premise_relaxed_no_context(self):
+    input_data = {
+        'question_x': 'Question?',
+        'canquestion_x': 'Question.',
+        'context': 'Context.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 1, # 'Probably yes / sometimes yes'
+        'goldstandard2': 2 #'No'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa_nli_baseline(
+        og_dataset,
+        baseline_scheme=preprocessors.CircaNLIBaselines.premise_only,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
+        add_context=False
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': 'nli hypothesis: . premise: Answer.',
+            'targets': 'contradiction'
+        }
+    )
+
+  def test_circa_nli_baseline_premise_strict_context(self):
+    input_data = {
+        'question_x': 'Question?',
+        'canquestion_x': 'Question.',
+        'context': 'Context.',
+        'answer_y': 'Answer.',
+        'goldstandard1': 5, # 'In the Middle'
+        'goldstandard2': 2 #'No'
+    }
+    og_dataset = tf.data.Dataset.from_tensors(input_data)
+    dataset = preprocessors.circa_nli_baseline(
+        og_dataset,
+        baseline_scheme=preprocessors.CircaNLIBaselines.premise_only,
+        aggregation_scheme=preprocessors.CircaAggregationSchemes.strict,
+        add_context=True
+    )
+    t5.data.assert_dataset(
+        dataset,
+        {
+            'inputs': 'nli context: Context. hypothesis: . premise: Answer.',
+            'targets': 'neutral'
+        }
+    )
+
   def test_rationales_preprocessor(self):
     input_data = {
         'review': 'This was a terrible movie. Complete waste of time.',

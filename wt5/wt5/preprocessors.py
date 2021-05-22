@@ -316,6 +316,86 @@ def circa(
 
   return dataset.map(my_fn, num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
+class CircaNLIBaselines:
+  premise_only = 'premise_only'
+  hypothesis_only = 'hypothesis_only'
+
+def circa_nli_baseline(
+  dataset,
+  baseline_scheme: CircaNLIBaselines,
+  aggregation_scheme: CircaAggregationSchemes = CircaAggregationSchemes.strict,
+  add_context: bool = False
+):
+
+  circa_nli_labels_strict = [
+    'entailment',
+    'none',
+    'none',
+    'contradiction',
+    'none',
+    'neutral',
+    'none',
+    'none',
+    'none'
+  ]
+
+  circa_nli_labels_relaxed = [
+    'entailment',
+    'none',
+    'contradiction',
+    'neutral',
+    'none',
+    'none'
+  ]
+
+  prefix = 'nli'
+
+  def my_fn(x):
+    if baseline_scheme == CircaNLIBaselines.hypothesis_only:
+      if add_context:
+        inputs = tf.strings.join([
+          prefix,
+          'context:',
+          x['context'],
+          'hypothesis:',
+          x['canquestion_x'],
+          'premise: .',
+        ], separator=' ')
+      else:
+        inputs = tf.strings.join([
+          prefix,
+          'hypothesis:',
+          x['canquestion_x'],
+          'premise: .',
+        ], separator=' ')
+    elif baseline_scheme == CircaNLIBaselines.premise_only:
+      if add_context:
+        inputs = tf.strings.join([
+          prefix,
+          'context:',
+          x['context'],
+          'hypothesis: .',
+          'premise:',
+          x['answer_y']
+        ], separator=' ')
+      else:
+        inputs = tf.strings.join([
+          prefix,
+          'hypothesis: .',
+          'premise:',
+          x['answer_y']
+        ], separator=' ')
+    else:
+      raise TypeError("Baseline scheme not implemented.")
+
+    if aggregation_scheme == CircaAggregationSchemes.strict:
+      class_label = tf.gather(circa_nli_labels_strict, x['goldstandard1'])
+    else:
+      class_label = tf.gather(circa_nli_labels_relaxed, x['goldstandard2'])
+
+    return {'inputs': inputs, 'targets': class_label}
+
+  return dataset.map(my_fn, num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
 def imdb_reviews(
     dataset,
