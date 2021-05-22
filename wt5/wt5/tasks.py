@@ -800,7 +800,7 @@ TaskRegistry.add(
     preprocessors=[
         functools.partial(
             preprocessors.circa_nli_baseline,
-            baseline_schema=preprocessors.preprocessors.CircaNLIBaselines.hypothesis_only,
+            baseline_schema=preprocessors.CircaNLIBaselines.hypothesis_only,
             aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
             add_context=False
         ),
@@ -821,7 +821,7 @@ TaskRegistry.add(
     preprocessors=[
         functools.partial(
             preprocessors.circa_nli_baseline,
-            baseline_schema=preprocessors.preprocessors.CircaNLIBaselines.hypothesis_only,
+            baseline_schema=preprocessors.CircaNLIBaselines.hypothesis_only,
             aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
             add_context=True
         ),
@@ -842,7 +842,7 @@ TaskRegistry.add(
     preprocessors=[
         functools.partial(
             preprocessors.circa_nli_baseline,
-            baseline_schema=preprocessors.preprocessors.CircaNLIBaselines.premise_only,
+            baseline_schema=preprocessors.CircaNLIBaselines.premise_only,
             aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
             add_context=False
         ),
@@ -863,7 +863,7 @@ TaskRegistry.add(
     preprocessors=[
         functools.partial(
             preprocessors.circa_nli_baseline,
-            baseline_schema=preprocessors.preprocessors.CircaNLIBaselines.premise_only,
+            baseline_schema=preprocessors.CircaNLIBaselines.premise_only,
             aggregation_scheme=preprocessors.CircaAggregationSchemes.relaxed,
             add_context=True
         ),
