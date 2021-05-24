@@ -123,6 +123,15 @@ CIRCA_TRAIN_SIZE = 20560
 CIRCA_VAL_SIZE = 6853 # same as test size
 # SEEDS: [13, 948, 2756]
 
+# Zero Shot Baselines
+MixtureRegistry.add(
+    "esnli_and_cos_e_to_circa_zero_shot",
+    [("esnli_v010", ESNLI_SIZE),
+     ("esnli_v010_0_expln", ESNLI_SIZE),
+     ("cos_e_v001_like_esnli", COS_E_SIZE)],
+    default_rate=_rate_num_input_examples,
+)
+
 # Relaxed, Matched, NLI Setting for each seed
 MixtureRegistry.add(
     "esnli_and_cos_e_to_circa_nli_relaxed_matched13",
